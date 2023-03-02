@@ -8,8 +8,13 @@ export default class MatchController {
     this._service = service;
   }
 
-  async findAll(_req: Request, res: Response) {
+  async findAll(req: Request, res: Response) {
     const result = await this._service.findAll();
+
+    if (req.query.inProgress) {
+      const queryResult = result.filter((m) => m.inProgress.toString() === req.query.inProgress);
+      return res.status(200).json(queryResult);
+    }
 
     return res.status(200).json(result);
   }
