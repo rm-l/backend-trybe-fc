@@ -12,11 +12,9 @@ export default class UserService implements IUserService {
 
   static passwordValidation(password: string, user: IUser) {
     const pass = bcrypt.compareSync(password, user.password);
-
     if (!pass || password.length < 6) {
       return null;
     }
-
     return pass;
   }
 
@@ -26,19 +24,14 @@ export default class UserService implements IUserService {
     const user = await this.model.findOne({
       where: { email },
     });
-
     if (!user || !regex.test(email)) {
       return null;
     }
-
     const verifyPass = UserService.passwordValidation(password, user);
-
     if (!verifyPass) {
       return null;
     }
-
     const token = this._jwt.createToken({ email });
-
     return { token };
   }
 
