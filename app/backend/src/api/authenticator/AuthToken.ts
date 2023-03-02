@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken';
 import ITokenPayload from '../interfaces/ITokenPayload';
 
 class AuthToken {
-  private secret = 'ngmsabe';
+  private secret = 'jwt_secret' || process.env.JWT_SECRET;
 
   createToken(payload: ITokenPayload): string {
     const token = jwt.sign(payload, this.secret);
