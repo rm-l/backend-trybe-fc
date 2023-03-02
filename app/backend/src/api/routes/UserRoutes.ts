@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import TokenValidation from '../../middlewares/TokenValidation';
 import loginValidation from '../../middlewares/LoginValidation';
 import UserService from '../services/UserService';
 import UserController from '../controllers/UserController';
@@ -12,6 +13,11 @@ userRoutes.post(
   loginValidation.fieldValidation,
   (req: Request, res: Response) => userController.userLogin(req, res),
 );
-// teamRoutes.get('/teams/:id', (req: Request, res: Response) => teamController.findById(req, res));
+
+userRoutes.get(
+  '/login/role',
+  TokenValidation.validateToken,
+  userController.getRole,
+);
 
 export default userRoutes;
