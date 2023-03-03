@@ -13,6 +13,11 @@ matchRoutes.patch(
   TokenValidation.validateToken,
   (req: Request, res: Response) => matchController.findFinished(req, res),
 );
+matchRoutes.patch(
+  '/matches/:id',
+  TokenValidation.validateToken,
+  (req: Request, res: Response) => matchController.updateMatch(req, res),
+);
 // teamRoutes.get('/teams/:id', (req: Request, res: Response) => teamController.findById(req, res));
 
 export default matchRoutes;
