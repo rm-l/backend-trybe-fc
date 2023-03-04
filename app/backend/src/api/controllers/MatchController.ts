@@ -35,4 +35,17 @@ export default class MatchController {
 
     return res.status(200).json({ message: 'Match updated' });
   }
+
+  async createMatch(req: Request, res: Response) {
+    const { homeTeamId, awayTeamId, awayTeamGoals, homeTeamGoals } = req.body;
+
+    const result = await this._service.createMatch(
+      homeTeamId,
+      awayTeamId,
+      awayTeamGoals,
+      homeTeamGoals,
+    );
+
+    return res.status(201).json(result);
+  }
 }
