@@ -48,4 +48,10 @@ export default class MatchService implements IServiceMatch {
 
     return newMatch as IMatch;
   }
+
+  async findById(id: number): Promise<IMatch> {
+    const team = await this.model.findOne({ where: { id } });
+
+    return team as IMatch;
+  }
 }
