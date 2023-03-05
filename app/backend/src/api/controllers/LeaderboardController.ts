@@ -122,7 +122,7 @@ class LeaderboardController {
     const matchService = new MatchService();
     const teamService = new TeamService();
     const matches = await matchService.findAll();
-    const allTeams = await teamService.findAll();
+    const teams = await teamService.findAll();
     const wins = matches.map((m) => {
       if (m.homeTeamGoals > m.awayTeamGoals) {
         return { ...m, victories: m.homeTeamId };
@@ -133,7 +133,7 @@ class LeaderboardController {
       return { ...m, victories: 0 };
     });
 
-    const homeLeaderboard = LeaderboardController.getPoints(allTeams, wins);
+    const homeLeaderboard = LeaderboardController.getPoints(teams, wins);
     return res.status(200).json(homeLeaderboard);
   };
 }
