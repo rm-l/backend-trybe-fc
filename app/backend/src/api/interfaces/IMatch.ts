@@ -11,6 +11,7 @@ interface IMatch {
   awayTeam?: {
     teamName: string;
   };
+  victories?: number;
 }
 
 export default IMatch;
