@@ -3,7 +3,6 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import { Response } from 'superagent';
 import { Model } from 'sequelize';
 import {allTeams} from './mock'
 import { matchesMock } from './matchmock';
@@ -49,6 +48,5 @@ describe('Testa a rota "/teams"', () => {
     expect(response.status).to.be.eq(200);
   });
 
-
-  });
+});
 
