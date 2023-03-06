@@ -37,12 +37,13 @@ describe('Testa a rota "/teams"', () => {
     expect(status).to.be.eq(200);
   });
 
-  it('test token required', async () => {
+  it('tests token required', async () => {
     const { status, body } = await chai.request(app).patch('/matches/5');
     expect(status).to.be.eq(401);
     expect(body).to.be.deep.eq({ "message": "Token not found" });
   });
-  it('', async function () {
+
+  it('tests leaderboard', async function () {
     sinon.stub(Model, 'findAll').resolves(matchesMock as unknown as Model[]);
     const response = await chai.request(app).get('/leaderboard/home');
     expect(response.status).to.be.eq(200);
