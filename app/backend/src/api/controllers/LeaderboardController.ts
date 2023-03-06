@@ -21,7 +21,6 @@ class LeaderboardController {
         victories += 1;
       }
     });
-
     return [points, victories];
   }
 
@@ -78,7 +77,6 @@ class LeaderboardController {
         goals += m.awayTeamGoals;
       }
     });
-
     return goals;
   }
 
@@ -103,7 +101,6 @@ class LeaderboardController {
       const totalGames = LeaderboardController.totalGames(t.id as number, matches);
       const goalsFavor = LeaderboardController.goalsHome(t.id as number, matches);
       const goalsOwn = LeaderboardController.goalsAway(t.id as number, matches);
-
       return { name: t.teamName,
         totalPoints: totalPoints[0],
         totalGames,
@@ -114,16 +111,15 @@ class LeaderboardController {
         goalsOwn,
       };
     });
-
     return result;
   }
 
-  homeLeaderboard = async (req: Request, res: Response) => {
+  leaderboard = async (req: Request, res: Response) => {
     const matchService = new MatchService();
     const teamService = new TeamService();
     const matches = await matchService.findAll();
     const teams = await teamService.findAll();
-    const wins = matches.map((m) => {
+    const victories = matches.map((m) => {
       if (m.homeTeamGoals > m.awayTeamGoals) {
         return { ...m, victories: m.homeTeamId };
       }
@@ -133,8 +129,8 @@ class LeaderboardController {
       return { ...m, victories: 0 };
     });
 
-    const homeLeaderboard = LeaderboardController.getPoints(teams, wins);
-    return res.status(200).json(homeLeaderboard);
+    const leaderboard = LeaderboardController.getPoints(teams, victories);
+    return res.status(200).json(leaderboard);
   };
 }
 
