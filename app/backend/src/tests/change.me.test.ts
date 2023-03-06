@@ -3,34 +3,56 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import TeamModel from '../database/models/TeamModel'
 import { Response } from 'superagent';
-import ITeam from '../api/interfaces/ITeam';
-
+import { Model } from 'sequelize';
+import {allTeams} from './mock'
+import { matchesMock } from './matchmock';
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('/teams test', function() {
-  afterEach(function() {
-    sinon.restore();
+describe('Testa a rota "/teams"', () => {
+
+  afterEach(() => sinon.restore());
+
+  it('it tests getAll', async () => {
+    sinon.stub(Model, 'findAll').resolves(allTeams);
+    const { status, body } = await chai.request(app).get('/teams');
+    expect(body).to.be.deep.eq(allTeams);
+    expect(status).to.be.eq(200);
   });
 
-  it('tests findall', async function() {
-    const result: ITeam[] = [
-      new TeamModel({ id: 1, teamName: 'Avaí/Kindermann' }),
-      new TeamModel({ id: 2, teamName: 'Bahia' }),
-    ];
+  it ('tests GetById', async () => {
+    sinon.stub(Model, 'findOne').resolves(allTeams[5]);
+    const { status, body } = await chai.request(app).get('/teams/5');
+    expect(body).to.be.deep.eq(allTeams[5]);
+    expect(status).to.be.eq(200);
+  });
 
-    sinon.stub(TeamModel, 'findAll').resolves(result as TeamModel[]);
+  it('tests login', async () => {
+    const { status } = await chai.request(app).post('/login').send({
+      email: 'admin@admin.com',
+      password: 'secret_admin'
+    });
 
-    const response = await chai.request(app).get('/teams');
-    expect(response.status).to.equal(200);
-    expect(response.body).to.equal(result);
+    expect(status).to.be.eq(200);
+  });
+
+  it('test token required', async () => {
+    const { status, body } = await chai.request(app).patch('/matches/5');
+
+    expect(status).to.be.eq(401);
+    expect(body).to.be.deep.eq({ "message": "Token not found" });
+  });
+
+  it('', async function () {
+    sinon.stub(Model, 'findAll').resolves(matchesMock as unknown as Model[]);
+
+
+    const response = await chai.request(app).get('/leaderboard/home');
+    expect(response.status).to.be.eq(200);
+  });
+
 
   });
 
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
-  });
-});
